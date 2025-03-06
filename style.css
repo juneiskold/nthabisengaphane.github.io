@@ -377,6 +377,28 @@ a:hover {
     .hamburger-menu {
         display: block;
     }
+
+
+    .unused-commands {
+        background-color: rgba(0, 0, 0, 0.9); /* Increase opacity for better contrast */
+        color: #0f0; /* Ensure text is visible with the same green color */
+    }
+    
+    .light-mode .unused-commands {
+        background-color: rgba(255, 255, 255, 0.95); /* Lighter background for light mode */
+        color: #333; /* Dark text for light mode */
+    }
+    
+    /* Make command items more visible */
+    .unused-command-item {
+        color: #0f0; /* Bright green for visibility */
+        background-color: rgba(0, 0, 0, 0.4); /* Slightly darker background */
+    }
+    
+    .light-mode .unused-command-item {
+        color: #333; /* Dark text for light mode */
+        background-color: rgba(255, 255, 255, 0.8); /* Lighter background */
+    }
     
     /* Hide unused commands by default on mobile */
     .unused-commands {
