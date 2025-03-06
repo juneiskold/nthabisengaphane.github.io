@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bonolo's Terminal Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="loading" id="loading">LOADING</div>
+    <div class="terminal" id="terminal">
+        <div class="terminal-header">
+            <div class="terminal-title">user@portfolio:~$</div>
+            <div class="theme-toggle" id="theme-toggle">
+                <span class="moon">🌙</span>
+                <span class="sun hidden">☀️</span>
+            </div>
+        </div>
+
+        <div class="terminal-content" id="terminal-content">
+            <div class="welcome-message">
+                <p>Welcome to my terminal portfolio! Type 'help' to see
+                    available commands.
+                </p>
+            </div>
+            <div class="command-history" id="command-history"></div>
+        </div>
+
+        <div class="terminal-input-line">
+            <span class="prompt">user@portfolio:~$</span>
+            <input type="text" class="terminal-input" id="terminal-input" autofocus>
+        </div>
+    </div>
+    <script type="module" src="main.js"></script>
+</body>
+</html>

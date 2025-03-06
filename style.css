@@ -1,0 +1,373 @@
+body {
+    background-color: black;
+    color: #0f0;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.light-mode {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.loading {
+    font-size: 24px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.terminal {
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    display: none;
+    transition: background-color 0.3s;
+}
+
+.terminal.light-mode {
+    background-color: #fff;
+}
+
+.terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #0f0;
+    padding-bottom: 10px;
+}
+
+.light-mode .terminal-header {
+    border-bottom: 1px solid #333;
+}
+
+.terminal-title {
+    font-weight: bold;
+}
+
+.theme-toggle {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.terminal-content {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    scroll-behavior: smooth;
+
+    -webkit-overflow-scrolling: touch; /* smooth scrolling on ios */
+}
+
+.welcome-message {
+    margin-bottom: 15px;
+}
+
+.command-history {
+    margin-bottom: 15px;
+}
+
+.terminal-input-line {
+    display: flex;
+}
+
+.prompt {
+    margin-right: 8px;
+}
+
+.terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+}
+
+.command-block {
+    margin-bottom: 10px;
+}
+
+.command-input {
+    margin-bottom: 10px;
+}
+
+.command-output {
+    white-space: pre-wrap;
+}
+
+
+.project-card {
+    border: 1px solid #0f0;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    animation: fadeIn 0.5s ease;
+}
+
+.light-mode .project-card {
+    border: 1px solid #333;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.project-tech {
+    margin-top: 5px;
+}
+
+.project-tech span {
+    margin-right: 10px;
+}
+
+
+.skills-container {
+    margin-bottom: 20px;
+}
+
+.skills-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.skill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #0f0;
+    padding-bottom: 5px;
+}
+
+.light-mode .skill-item {
+    border-bottom: 1px dashed #333;
+}
+
+.skill-name {
+    font-weight: bold;
+}
+
+.skill-rating {
+    letter-spacing: 2px;
+}
+
+
+.contact-container {
+    margin-bottom: 20px;
+}
+
+.contact-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.contact-list li {
+    margin-bottom: 8px;
+}
+
+.contact-label {
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+
+.experience-container {
+    margin-bottom: 20px;
+}
+
+.education-list, .certifications-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.education-list li, .certifications-list li {
+    margin-bottom: 8px;
+}
+
+
+a {
+    color: inherit;
+    text-decoration: underline;
+    position: relative;
+}
+
+a:hover {
+    color: #00ff00;
+    text-decoration: underline;
+}
+
+.light-mode a:hover {
+    color: #008800;
+}
+
+.project-link::after, .contact-link::after,
+.education-link::after, .certification-link::after {
+    content: ' 🔗';
+    font-size: 0.8em;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.unused-commands {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+    z-index: 100;
+    max-width: 200px;
+    backdrop-filter: blur(3px);
+    transition: all 0.3s ease;
+    bottom: 20px;
+    right: 20px;
+}
+
+
+
+/* for mobile screens, position at bottom with full width */
+@media (max-width: 768px) {
+    .unused-commands {
+        left: 20px;
+        right: 20px;
+        max-width: none;
+        width: auto;
+    }
+
+    .unused-commands-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px 1fr));
+        gap: 8px;
+    }
+}
+
+
+
+.light-mode .unused-commands {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .unused-commands {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.unused-commands-header {
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9em;
+}
+
+.unused-commands-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.unused-command-item {
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+
+.unused-command-item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    transform: scale(1.05);
+}
+
+.dark-mode .unused-command-item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+
+/* mobile virtual keyboard adjustments */
+@media (max_width: 768px) {
+    .terminal {
+        padding: 10px;
+    }
+
+    /* adjust when virtual keyboard is active */
+    body.keyboard-open .terminal-content {
+        height: 40vh;
+    }
+}
+
+/* mobile portrait mode specific adjustments */
+@media (max-width:480px) {
+    .prompt {
+        font-size: 12px;
+    }
+
+    .terminal-input {
+        font-size: 14px;
+    }
+
+    .project-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .skill-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .skill-rating {
+        align-self: flex-end;
+    }
+}
+
+
+
+.reset-commands {
+    padding: 5px 10px;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    text-align: center;
+    margin-top: 8px;
+    font-weight: bold;
+    transition: all 0.2 ease;
+}
+
+.reset-commands:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
+}
+
+.dark-mode .reset-commands {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .reset-commands:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
