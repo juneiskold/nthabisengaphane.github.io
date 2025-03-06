@@ -9,7 +9,6 @@ const moonIcon = document.querySelector(".moon");
 const sunIcon = document.querySelector(".sun");
 const terminalContent = document.querySelector(".terminal-content");
 
-
 let index = 0;
 let darkMode = defaultDarkMode;
 
@@ -19,6 +18,7 @@ let historyIndex = -1;
 
 const usedCommands = new Set();
 let unusedCommandsElement;
+let hamburgerMenu;
 
 const commands = {
    help: function() {
@@ -185,23 +185,53 @@ ${portfolioData.interests.map(interest => `• ${interest}`).join('\n')}
    }
 };
 
-
-
 function resetAllCommands() {
    usedCommands.clear();
    updateUnusedCommandsList();
-  
    
    addToHistory("system", "All commands have been reset. Type 'help' to see available commands.");
 }
 
+function createHamburgerMenu() {
+    // Create hamburger menu button
+    hamburgerMenu = document.createElement('div');
+    hamburgerMenu.className = 'hamburger-menu';
+    hamburgerMenu.innerHTML = `
+        <div class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    `;
+    document.body.appendChild(hamburgerMenu);
+    
+    // Add event listener to toggle unused commands visibility
+    hamburgerMenu.addEventListener('click', function() {
+        unusedCommandsElement.classList.toggle('active');
+        hamburgerMenu.classList.toggle('active');
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!unusedCommandsElement.contains(event.target) && 
+            !hamburgerMenu.contains(event.target) && 
+            unusedCommandsElement.classList.contains('active')) {
+            unusedCommandsElement.classList.remove('active');
+            hamburgerMenu.classList.remove('active');
+        }
+    });
+}
 
 function createUnusedCommandsElement() {
-   
    if (!unusedCommandsElement) {
        unusedCommandsElement = document.createElement('div');
        unusedCommandsElement.className = 'unused-commands';
        document.body.appendChild(unusedCommandsElement);
+       
+       // Create hamburger menu for mobile
+       if (window.innerWidth <= 768) {
+           createHamburgerMenu();
+       }
    }
   
    updateUnusedCommandsList();
@@ -211,15 +241,12 @@ function updateUnusedCommandsList() {
    const commandsList = Object.keys(commands);
    const unusedCommandsList = commandsList.filter(cmd => !usedCommands.has(cmd));
   
-   
    if (unusedCommandsList.length === 0) {
-       
        unusedCommandsElement.innerHTML = `
            <div class="unused-commands-header">All Commands Used!</div>
            <div class="reset-commands">Reset Commands</div>
        `;
       
-       
        const resetButton = document.querySelector('.reset-commands');
        if (resetButton) {
            resetButton.addEventListener('click', resetAllCommands);
@@ -228,7 +255,6 @@ function updateUnusedCommandsList() {
        return;
    }
   
-   
    unusedCommandsElement.innerHTML = `
        <div class="unused-commands-header">Discover More:</div>
        <div class="unused-commands-list">
@@ -240,16 +266,22 @@ function updateUnusedCommandsList() {
        </div>
    `;
   
-   
    document.querySelectorAll('.unused-command-item').forEach(item => {
        item.addEventListener('click', function() {
            const cmd = this.getAttribute('data-command');
            terminalInput.value = cmd;
            terminalInput.focus();
+           
+           // On mobile, close the menu after selection
+           if (window.innerWidth <= 768) {
+               unusedCommandsElement.classList.remove('active');
+               if (hamburgerMenu) {
+                   hamburgerMenu.classList.remove('active');
+               }
+           }
        });
    });
 }
-
 
 function markCommandAsUsed(cmd) {
    usedCommands.add(cmd);
@@ -258,13 +290,10 @@ function markCommandAsUsed(cmd) {
    }
 }
 
-
-
 const loadingInterval = setInterval(() => {
    loadingText.textContent = glitchFrames[index];
    index = (index + 1) % glitchFrames.length;
 }, 300);
-
 
 setTimeout(() => {
    clearInterval(loadingInterval);
@@ -272,23 +301,15 @@ setTimeout(() => {
    terminal.style.display = 'flex';
    terminalInput.focus();
   
-   
    createUnusedCommandsElement();
-  
-   
    addToHistory("help", commands.help());
 }, 3000);
-
-
 
 function scrollToBottom() {
    if (terminalContent) {
        terminalContent.scrollTop = terminalContent.scrollHeight;
    }
 }
-
-
-
 
 // Handle mobile keyboard appearance
 function handleMobileKeyboard() {
@@ -301,6 +322,18 @@ function handleMobileKeyboard() {
             document.body.classList.add('keyboard-open');
         } else {
             document.body.classList.remove('keyboard-open');
+        }
+        
+        // Adjust hamburger menu visibility based on screen width
+        if (window.innerWidth <= 768) {
+            if (!hamburgerMenu) {
+                createHamburgerMenu();
+            }
+            hamburgerMenu.style.display = 'block';
+            unusedCommandsElement.classList.remove('active');
+        } else if (hamburgerMenu) {
+            hamburgerMenu.style.display = 'none';
+            unusedCommandsElement.classList.add('active');
         }
     });
     
@@ -325,10 +358,19 @@ function setupTouchHandling() {
         document.body.classList.add('touch-device');
         
         // Make commands in the unused commands list easier to tap
-        const originalSize = 10; // 10px padding by default
-        document.querySelectorAll('.unused-command-item').forEach(item => {
-            item.style.padding = `${originalSize * 1.5}px`;
-        });
+        const updateTouchSizes = () => {
+            document.querySelectorAll('.unused-command-item').forEach(item => {
+                item.style.padding = '15px';
+            });
+        };
+        
+        // Run initially and whenever list is updated
+        updateTouchSizes();
+        const originalUpdateList = updateUnusedCommandsList;
+        updateUnusedCommandsList = function() {
+            originalUpdateList();
+            updateTouchSizes();
+        };
         
         // Improve scrolling on mobile
         terminalContent.style.WebkitOverflowScrolling = 'touch';
@@ -340,10 +382,17 @@ window.addEventListener('load', function() {
     setTimeout(scrollToBottom, 3100);
     handleMobileKeyboard();
     setupTouchHandling();
+    
+    // Check initial screen size
+    if (window.innerWidth <= 768) {
+        if (hamburgerMenu) {
+            hamburgerMenu.style.display = 'block';
+        }
+        if (unusedCommandsElement) {
+            unusedCommandsElement.classList.remove('active');
+        }
+    }
 });
-
-
-
 
 function processCommand(cmd) {
    cmd = cmd.trim().toLowerCase();
@@ -359,8 +408,6 @@ function processCommand(cmd) {
    }
 }
 
-
-
 function addToHistory(input, output) {
    if (output === '') return; 
   
@@ -370,7 +417,6 @@ function addToHistory(input, output) {
    const commandInput = document.createElement('div');
    commandInput.className = 'command-input';
   
-   
    if (input === 'system') {
        commandInput.innerHTML = `<span class="prompt">system:</span>`;
    } else {
@@ -386,14 +432,8 @@ function addToHistory(input, output) {
   
    commandHistory.appendChild(commandBlock);
   
-  
    scrollToBottom();
 }
-
-
-
-
-
 
 // add command to history array for up/down navigation
 function addCommandToHistory(cmd) {
@@ -405,8 +445,6 @@ function addCommandToHistory(cmd) {
         historyIndex = commandsHistory.length;
     }
 }
-
-
 
 // add clipboard and command history navigation fuctionality
 terminalInput.addEventListener('keydown', function(e) {
@@ -446,8 +484,6 @@ terminalInput.addEventListener('keydown', function(e) {
         }
     }
 
-
-
     // Down arrow - navigate command history forward
     else if (e.key === 'ArrowDown') {
         e.preventDefault();
@@ -460,11 +496,7 @@ terminalInput.addEventListener('keydown', function(e) {
             terminalInput.value = '';
         }
     }
-
 });
-
-
-
 
 // Make the terminal content selectable for copy functionality
 terminalContent.addEventListener('mouseup', function(e) {
@@ -475,9 +507,6 @@ terminalContent.addEventListener('mouseup', function(e) {
     }
 });
 
-
-
-
 // Add copy event listener to document
 document.addEventListener('copy', function(e) {
     const selection = window.getSelection().toString();
@@ -487,47 +516,23 @@ document.addEventListener('copy', function(e) {
     }
 });
 
-
 // Add paste event listener to terminal input
 terminalInput.addEventListener('paste', function(e) {
     // Let the default paste behavior happen
     // The browser will automatically handle Ctrl+V
 });
 
-
-
-
-
-
-
-
-
-
-
-terminalInput.addEventListener('keydown', function(e) {
-   if (e.key === 'Enter') {
-       const input = terminalInput.value;
-       const output = processCommand(input);
-      
-       if (output !== '') {
-           addToHistory(input, output);
-       } else {
-          
-           setTimeout(scrollToBottom, 100);
-       }
-      
-       terminalInput.value = '';
-   }
-});
-
-
-
 function toggleTheme() {
    darkMode = !darkMode;
   
    document.body.classList.toggle('light-mode');
    terminal.classList.toggle('light-mode');
-   unusedCommandsElement.classList.toggle('light-mode');
+   if (unusedCommandsElement) {
+       unusedCommandsElement.classList.toggle('light-mode');
+   }
+   if (hamburgerMenu) {
+       hamburgerMenu.classList.toggle('light-mode');
+   }
   
    if (darkMode) {
        moonIcon.classList.remove('hidden');
@@ -538,32 +543,22 @@ function toggleTheme() {
    }
 }
 
-
-
 themeToggle.addEventListener('click', function() {
    toggleTheme();
-   
    setTimeout(scrollToBottom, 100);
 });
-
-
 
 terminal.addEventListener('click', function() {
    terminalInput.focus();
 });
 
-
-
 const observer = new MutationObserver(function(mutations) {
    scrollToBottom();
 });
 
-
-
 if (terminalContent) {
    observer.observe(terminalContent, { childList: true, subtree: true });
 }
-
 
 document.querySelectorAll('.skills-container, .projects-container, .contact-container, .experience-container, .blog-container').forEach(container => {
    if (container) {
@@ -571,9 +566,41 @@ document.querySelectorAll('.skills-container, .projects-container, .contact-cont
    }
 });
 
-
-
 window.addEventListener('load', function() {
    setTimeout(scrollToBottom, 3100); 
 });
 
+// Add swipe functionality for mobile
+function setupSwipeGestures() {
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, false);
+    
+    document.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, false);
+    
+    function handleSwipe() {
+        const swipeThreshold = 100;
+        if (touchEndX - touchStartX > swipeThreshold && window.innerWidth <= 768) {
+            // Swipe right - show menu
+            unusedCommandsElement.classList.add('active');
+            if (hamburgerMenu) {
+                hamburgerMenu.classList.add('active');
+            }
+        } else if (touchStartX - touchEndX > swipeThreshold && window.innerWidth <= 768) {
+            // Swipe left - hide menu
+            unusedCommandsElement.classList.remove('active');
+            if (hamburgerMenu) {
+                hamburgerMenu.classList.remove('active');
+            }
+        }
+    }
+}
+
+// Initialize swipe functionality
+setupSwipeGestures();
