@@ -70,7 +70,6 @@ body.light-mode {
     overflow-y: auto;
     margin-bottom: 15px;
     scroll-behavior: smooth;
-
     -webkit-overflow-scrolling: touch; /* smooth scrolling on ios */
 }
 
@@ -112,7 +111,6 @@ body.light-mode {
     white-space: pre-wrap;
 }
 
-
 .project-card {
     border: 1px solid #0f0;
     border-radius: 5px;
@@ -139,7 +137,6 @@ body.light-mode {
 .project-tech span {
     margin-right: 10px;
 }
-
 
 .skills-container {
     margin-bottom: 20px;
@@ -171,7 +168,6 @@ body.light-mode {
     letter-spacing: 2px;
 }
 
-
 .contact-container {
     margin-bottom: 20px;
 }
@@ -190,7 +186,6 @@ body.light-mode {
     margin-right: 8px;
 }
 
-
 .experience-container {
     margin-bottom: 20px;
 }
@@ -203,7 +198,6 @@ body.light-mode {
 .education-list li, .certifications-list li {
     margin-bottom: 8px;
 }
-
 
 a {
     color: inherit;
@@ -231,9 +225,65 @@ a:hover {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* Hamburger Menu Styles */
+.hamburger-menu {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(0, 255, 0, 0.2);
+    backdrop-filter: blur(5px);
+    z-index: 200;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.light-mode .hamburger-menu {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.hamburger-icon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hamburger-icon span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: #0f0;
+    margin: 3px 0;
+    transition: all 0.3s ease;
+}
+
+.light-mode .hamburger-icon span {
+    background-color: #333;
+}
+
+.hamburger-menu.active .hamburger-icon span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-menu.active .hamburger-icon span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-menu.active .hamburger-icon span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Unused Commands Container Styles */
 .unused-commands {
     position: fixed;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.8);
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding: 12px;
@@ -243,36 +293,13 @@ a:hover {
     transition: all 0.3s ease;
     bottom: 20px;
     right: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
-
-
-
-/* for mobile screens, position at bottom with full width */
-@media (max-width: 768px) {
-    .unused-commands {
-        left: 20px;
-        right: 20px;
-        max-width: none;
-        width: auto;
-    }
-
-    .unused-commands-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(80px 1fr));
-        gap: 8px;
-    }
-}
-
-
 
 .light-mode .unused-commands {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.dark-mode .unused-commands {
-    background-color: rgba(0, 0, 0, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .unused-commands-header {
@@ -291,7 +318,7 @@ a:hover {
 }
 
 .unused-command-item {
-    padding: 5px 10px;
+    padding: 8px 10px;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -300,63 +327,23 @@ a:hover {
 }
 
 .unused-command-item:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 255, 0, 0.1);
     transform: scale(1.05);
 }
 
-.dark-mode .unused-command-item:hover {
+.light-mode .unused-command-item:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-
-/* mobile virtual keyboard adjustments */
-@media (max_width: 768px) {
-    .terminal {
-        padding: 10px;
-    }
-
-    /* adjust when virtual keyboard is active */
-    body.keyboard-open .terminal-content {
-        height: 40vh;
-    }
-}
-
-/* mobile portrait mode specific adjustments */
-@media (max-width:480px) {
-    .prompt {
-        font-size: 12px;
-    }
-
-    .terminal-input {
-        font-size: 14px;
-    }
-
-    .project-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .skill-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .skill-rating {
-        align-self: flex-end;
-    }
-}
-
-
-
 .reset-commands {
-    padding: 5px 10px;
+    padding: 8px 10px;
     border-radius: 4px;
     background-color: rgba(0, 0, 0, 0.5);
     cursor: pointer;
     text-align: center;
     margin-top: 8px;
     font-weight: bold;
-    transition: all 0.2 ease;
+    transition: all 0.2s ease;
 }
 
 .reset-commands:hover {
@@ -364,10 +351,242 @@ a:hover {
     transform: scale(1.05);
 }
 
-.dark-mode .reset-commands {
-    background-color: rgba(255, 255, 255, 0.1);
+.light-mode .reset-commands {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-.dark-mode .reset-commands:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+.light-mode .reset-commands:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile-Specific Adjustments */
+@media (max-width: 768px) {
+    .terminal {
+        padding: 15px;
+    }
+    
+    .terminal-header {
+        padding-bottom: 5px;
+    }
+    
+    .terminal-title {
+        font-size: 14px;
+    }
+    
+    /* Hamburger menu visible on mobile */
+    .hamburger-menu {
+        display: block;
+    }
+    
+    /* Hide unused commands by default on mobile */
+    .unused-commands {
+        right: -250px; /* off-screen by default */
+        bottom: 80px;
+        opacity: 0;
+        max-width: 200px;
+        width: 80%;
+        max-height: 60vh;
+        overflow-y: auto;
+        transform: scale(0.95);
+        pointer-events: none;
+    }
+    
+    /* Show when active */
+    .unused-commands.active {
+        right: 20px;
+        opacity: 1;
+        transform: scale(1);
+        pointer-events: all;
+    }
+    
+    /* Grid layout for command items on mobile */
+    .unused-commands-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    /* Adjust prompt and input on small screens */
+    .prompt {
+        font-size: 12px;
+    }
+    
+    .terminal-input {
+        font-size: 14px;
+    }
+    
+    /* Project cards adjustments */
+    .project-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    /* Skill items adjustments */
+    .skill-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .skill-rating {
+        align-self: flex-end;
+    }
+    
+    /* Virtual keyboard adjustments */
+    body.keyboard-open .terminal-content {
+        height: 40vh;
+        max-height: 40vh;
+    }
+     
+
+    body.keyboard-open .terminal-input-line {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: black;
+        padding: 10px;
+        z-index: 100;
+    }
+    
+    .light-mode.keyboard-open .terminal-input-line {
+        background-color: #f5f5f5;
+    }
+    
+    body.keyboard-open .hamburger-menu {
+        bottom: 70px;
+    }
+    
+    /* Blog list styles */
+    .blog-container {
+        margin-bottom: 20px;
+    }
+    
+    .blog-list {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    
+    .blog-item {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px dashed #0f0;
+    }
+    
+    .light-mode .blog-item {
+        border-bottom: 1px dashed #333;
+    }
+    
+    .blog-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    
+    .blog-date {
+        font-size: 0.9em;
+        opacity: 0.8;
+    }
+    
+    .blog-snippet {
+        font-style: italic;
+        margin-top: 5px;
+    }
+    
+    .blog-link::after {
+        content: ' 🔗';
+        font-size: 0.8em;
+    }
+    
+    /* Touch-specific styles */
+    .touch-device .unused-command-item {
+        padding: 12px;
+    }
+    
+    .touch-device .terminal-input {
+        font-size: 16px; /* prevent zoom on iOS */
+    }
+    
+    /* Animations for skill project techs */
+    .project-tech span {
+        display: inline-block;
+        animation: fadeSlideIn 0.5s ease forwards;
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    
+    @keyframes fadeSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Scrollbar customization */
+    .terminal-content::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .terminal-content::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+    }
+    
+    .terminal-content::-webkit-scrollbar-thumb {
+        background: rgba(0, 255, 0, 0.5);
+        border-radius: 4px;
+    }
+    
+    .light-mode .terminal-content::-webkit-scrollbar-thumb {
+        background: rgba(0, 100, 0, 0.3);
+    }
+    
+    /* Responsive adjustments for very small screens */
+    @media (max-width: 340px) {
+        .terminal {
+            padding: 10px;
+        }
+        
+        .prompt {
+            font-size: 11px;
+        }
+        
+        .terminal-input {
+            font-size: 13px;
+        }
+        
+        .unused-commands-list {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    /* Swipe animation for mobile menu */
+    @keyframes swipeInRight {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes swipeOutRight {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(100%);
+        }
+    }
+    
+    .unused-commands.active {
+        animation: swipeInRight 0.3s forwards;
+    }
+    
+    .unused-commands:not(.active) {
+        animation: swipeOutRight 0.3s forwards;
+    }
 }
